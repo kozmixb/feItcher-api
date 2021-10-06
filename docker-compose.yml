@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  feitcher-nginx:
+    container_name: feitcher_nginx
+    image: nginx:latest
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/html:ro
+    ports:
+      - "8000:80"
+    depends_on:
+      - feitcher_php
+    networks:
+      - app-network
+
+  feitcher-php:
+    container_name: feitcher_php
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - feitcher_db
+    networks:
+      - app-network
+
+  feitcher-db:
+    container_name: feitcher_db
+    image: mysql:5.7.22
+    volumes:
+      - ./storage/app/dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: ${DB_CONNECTION}
+    networks:
+      - app-network
+
+networks:
+  app-network:

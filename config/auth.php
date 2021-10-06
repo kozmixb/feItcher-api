@@ -18,6 +18,12 @@ return [
         'passwords' => 'users',
     ],
 
+    'proxy' => [
+        'client_id' => env('CLIENT_ID'),
+        'client_secret' => env('CLIENT_SECRET'),
+        'grant_type' => env('GRANT_TYPE', 'password'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -42,7 +48,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'passport',
             'provider' => 'users',
             'hash' => false,
         ],
@@ -68,7 +74,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\Models\User::class,
         ],
 
         // 'users' => [

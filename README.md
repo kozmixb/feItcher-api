@@ -1,61 +1,64 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Feitcher API
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+This project is designed to retrive products and their insurance info from 3rd party API
+Project is written in PHP using the following framework: [laravel 7.0](https://laravel.com/docs/7.x/installation#server-requirements)
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Pre-requisites
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+For development you will need the following packages in your environment
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Docker Desktop [download](https://www.docker.com/products/docker-desktop)
 
-## Learning Laravel
+##  Getting started
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+clone repository
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+	git clone https://github.com/kozmixb/feItcher-api.git
 
-## Laravel Sponsors
+navigate to project folder
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+	cd ./feIther-api
 
-### Premium Partners
+create and configure environment file
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+	cp .env.example .env
 
-## Contributing
+set 3rd party api base url in `.env`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+	API_BASE_URL=https://something.com/v2/products/
 
-## Code of Conduct
+When docker builds the project it will spin up a database container and taking the DB credentials from the `.env` file so make sure that is setup correctly
+Recommend you to leave it as it is if you are for working on the project
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+	DB_CONNECTION=mysql
+	DB_HOST=feitcher_db    <- container name in docker compose
+	DB_PORT=3306
+	DB_DATABASE=docker
+	DB_USERNAME=docker
+	DB_PASSWORD=secret
 
-## Security Vulnerabilities
+run docker compose from project directory
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+	docker compose up --build
 
-## License
+## Docker build
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Composer packages will be installed when docker builds the `feitcher_php` container however the following commands needs to be run to setup the the project itself
+
+	docker exec -it feitcher_php php /var/www/html/artisan key:generate --force
+	docker exec -it feitcher_php php /var/www/html/artisan migrate --force
+	docker exec -it feitcher_php php /var/www/html/artisan passport:install --force
+	
+when you ran the last command make sure you grab the password credentials 
+
+	Password grant client created successfully.
+	Client ID: 2
+	Client secret: xxxxxxx
+
+And add these to the `.env`
+
+	CLIENT_ID=2
+	CLIENT_SECRET=xxxxxx
+
+once it is done you are good to go
