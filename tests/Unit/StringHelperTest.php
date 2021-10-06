@@ -13,7 +13,7 @@ class StringHelperTest extends TestCase
     private $examples = [
         '  Hello [sdkjskds] World  ' => 'Hello World',
         '<span> new world 9374hf3235</span> test' => 'test',
-        '& this isn\'t working "' => '&amp; this isn\'t working'
+        '& this isn\'t working "' => '& this isn\'t working'
     ];
 
     /**
