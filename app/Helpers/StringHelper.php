@@ -18,7 +18,6 @@ class StringHelper
         $string = htmlentities($string, ENT_COMPAT, 'utf-8');
 
         $forbidden = [
-            '/<[^>]*>/',
             '/\[.*\]/U',                                                //---- remove and string inbetween brackets
             '/&(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);/i',
             '/[\x00-\x1F\x7F]/'                                         //---- remove Ascii Control characters

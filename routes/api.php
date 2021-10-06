@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', [\App\Http\Controllers\LoginController::class, 'login']);
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'prefix' => 'products',
+    // 'middleware' => ['auth:api']
+], function () {
+    Route::get('/', [\App\Http\Controllers\ProductController::class, 'index']);
+    Route::get('{productId}', [\App\Http\Controllers\ProductController::class, 'show']);
 });

@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
+class LandingPageTest extends TestCase
 {
     /**
      * A basic test example.
@@ -16,6 +15,8 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertStatus(200);
+        $response
+            ->assertJson(['app_name' => config('app.name')])
+            ->assertStatus(200);
     }
 }
