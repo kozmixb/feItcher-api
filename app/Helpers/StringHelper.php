@@ -25,6 +25,7 @@ class StringHelper
         $string = preg_replace($forbidden, '', $string);
 
         $string = trim(preg_replace('/ {2,}/', ' ', $string));
+        $string = html_entity_decode($string);
         return $string;
     }
 }
